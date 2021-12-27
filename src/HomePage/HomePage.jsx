@@ -60,8 +60,8 @@ class HomePage extends React.Component {
         let sList=this.state.SelectedList;
         for (let i =0; i<sList.length; i++){
             this.props.deleteUser(sList[i].id);
-            location.reload();
         }
+        location.reload();
     }
 
     blockUsers(){
@@ -70,11 +70,8 @@ class HomePage extends React.Component {
         for (let i =0; i<sList.length; i++){
             users.items[users.items.indexOf(sList[i])].status = "Blocked" ;
             this.props.update(sList[i].id,this.state.List[this.state.List.indexOf(sList[i])]);
-            if (user.status==="Blocked"){
-                this.props.logout();
-            }
-
         }
+        location.reload();
     }
 
     unblockUsers(){
@@ -83,9 +80,8 @@ class HomePage extends React.Component {
         for (let i =0; i<sList.length; i++){
             users.items[users.items.indexOf(sList[i])].status = "Active" ;
             this.props.update(sList[i].id,this.state.List[this.state.List.indexOf(sList[i])]);
-
         }
-
+        location.reload();
     }
 
     render() {
@@ -97,6 +93,7 @@ class HomePage extends React.Component {
                 <Button as="input" type="button" value="Delete" onClick={()=>this.deleteUsers()} />{'  '}
                 <Button as="input" type="button" value="Block" onClick={()=>this.blockUsers()}/>{'  '}
                 <Button as="input" type="button" value="Unblock" onClick={()=>this.unblockUsers()} />
+
                 <Table striped bordered hover>
                     <thead>
                     <tr>
@@ -135,7 +132,7 @@ class HomePage extends React.Component {
                                 <td>{user.email}</td>
                                 <td>{user.dateOfRegistration}</td>
                                 <td>{user.dateOfLastLogin}</td>
-                                <td>{user.status}</td>
+                                <td >{user.status}</td>
                             </tr>
                         ))}
                         </tbody>
