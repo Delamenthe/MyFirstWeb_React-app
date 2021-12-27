@@ -15,7 +15,7 @@ export function configureFakeBackend() {
 
                     // find if any user matches login credentials
                     let filteredUsers = users.filter(user => {
-                        return user.username === params.username && user.password === params.password;
+                        return user.name === params.name && user.password === params.password;
                     });
 
                     if (filteredUsers.length) {
@@ -23,15 +23,17 @@ export function configureFakeBackend() {
                         let user = filteredUsers[0];
                         let responseJson = {
                             id: user.id,
-                            username: user.username,
-                            firstName: user.firstName,
-                            lastName: user.lastName,
+                            name: user.name,
+                            email: user.email,
+                            dateOfRegistration: user.dateOfRegistration,
+                            dateOfLastLogin: user.dateOfLastLogin,
+                            status: user.status,
                             token: 'fake-jwt-token'
                         };
                         resolve({ ok: true, text: () => Promise.resolve(JSON.stringify(responseJson)) });
                     } else {
                         // else return error
-                        reject('Username or password is incorrect');
+                        reject('Name or password is incorrect');
                     }
 
                     return;
@@ -76,9 +78,9 @@ export function configureFakeBackend() {
                     let newUser = JSON.parse(opts.body);
 
                     // validation
-                    let duplicateUser = users.filter(user => { return user.username === newUser.username; }).length;
+                    let duplicateUser = users.filter(user => { return user.name === newUser.name; }).length;
                     if (duplicateUser) {
-                        reject('Username "' + newUser.username + '" is already taken');
+                        reject('Name "' + newUser.name + '" is already taken');
                         return;
                     }
 
