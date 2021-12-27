@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { userActions } from '../_actions';
 import Table from 'react-bootstrap/Table';
 import {Button} from "react-bootstrap";
+import {userService} from "../_services";
 
 
 class HomePage extends React.Component {
@@ -52,7 +53,6 @@ class HomePage extends React.Component {
         });
     }
 
-
     componentDidMount() {
         this.props.getUsers();
     }
@@ -64,6 +64,17 @@ class HomePage extends React.Component {
         }
     }
 
+    blockUsers(){
+        const { user, users } = this.props;
+        let sList=this.state.SelectedList;
+        for (let i =0; i<sList.length; i++){
+            users.items[users.items.indexOf(sList[i])].status = "Passive" ;
+            this.props.update(sList[i].id,this.state.List[this.state.List.indexOf(sList[i])]);
+
+        }
+
+    }
+
 
     render() {
         const { user, users } = this.props;
@@ -72,7 +83,7 @@ class HomePage extends React.Component {
             <div className="col-md-6 col-md-offset-3">
                 <h3>All registered users:</h3>
                 <Button as="input" type="button" value="Delete" onClick={()=>this.deleteUsers()} />{'  '}
-                <Button as="input" type="button" value="Block" />{'  '}
+                <Button as="input" type="button" value="Block" onClick={()=>this.blockUsers()}/>{'  '}
                 <Button as="input" type="button" value="Unblock" />
                 {users.loading && <em>Loading users...</em>}
                 {users.error && <span className="text-danger">ERROR: {users.error}</span>}
@@ -136,7 +147,8 @@ function mapState(state) {
 
 const actionCreators = {
     getUsers: userActions.getAll,
-    deleteUser: userActions.delete
+    deleteUser: userActions.delete,
+    update: userActions.update
 }
 
 const connectedHomePage = connect(mapState, actionCreators)(HomePage);

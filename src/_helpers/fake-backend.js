@@ -122,9 +122,31 @@ export function configureFakeBackend() {
                     return;
                 }
 
-                // pass through any requests not handled above
-                realFetch(url, opts).then(response => resolve(response));
+                // update user
+                if (url.endsWith('/users/update') && opts.method === 'PUT') {
 
+                    if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
+                        // find user by id in users array
+                        let urlParts = url.split('/');
+                        let id = parseInt(urlParts[urlParts.length - 1]);
+                        for (let i = 0; i < users.length; i++) {
+                            let user = users[i];
+                            if (user.id === id) {
+                                user = opts.body;
+                                localStorage.setItem('users', JSON.stringify(users));
+                                break;
+                            }
+                        }
+                        // respond 200 OK
+                        resolve({ok: true, text: () => Promise.resolve(JSON.stringify(users))});
+
+                        return;
+                    }
+                }
+
+
+                    // pass through any requests not handled above
+                    realFetch(url, opts).then(response => resolve(response));
             }, 500);
         });
     }
