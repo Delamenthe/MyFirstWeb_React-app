@@ -18,6 +18,9 @@ function authorize() {
             if (!user)
                 return res.status(401).json({ message: 'Unauthorized' });
 
+            if (user.status ==="Blocked")
+                return res.status(401).json({ message: 'This user is blocked' });
+
             // authorization successful
             req.user = user.get();
             next();

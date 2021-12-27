@@ -8,7 +8,7 @@ module.exports = {
     getAll,
     getById,
     create,
-    update,
+    update: _update,
     delete: _delete
 };
 
@@ -16,8 +16,10 @@ async function authenticate({ name, password }) {
     const user = await db.User.scope('withHash').findOne({ where: { name } });
 
     if (!user || !(await bcrypt.compare(password, user.hash)))
-        throw 'name or password is incorrect';
+        throw 'Name or password is incorrect';
 
+    if(user.status === "Blocked")
+        throw 'This user is blocked';
     user.dateOfLastLogin = new Date().toLocaleString();
     await user.save();
     // authentication successful
@@ -51,7 +53,7 @@ async function create(params) {
     await db.User.create(params);
 }
 
-async function update(id, params) {
+async function _update(id, params) {
     const user = await getUser(id);
 
     // validate
