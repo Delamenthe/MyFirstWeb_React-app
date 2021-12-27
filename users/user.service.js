@@ -45,7 +45,7 @@ async function create(params) {
     }
 
     params.dateOfRegistration = new Date().toLocaleString();
-    params.dateOfLastLogin = new Date().toLocaleString();
+    params.dateOfLastLogin = "";
     params.status = "Active";
     // save user
     await db.User.create(params);
