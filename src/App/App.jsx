@@ -24,7 +24,7 @@ class App extends React.Component {
         return (
             <div className="jumbotron">
                 <div className="container">
-                    <div className="col-sm-8 col-sm-offset-2">
+                    <div className="col-sm-20 col-sm-offset-0">
                         {alert.message &&
                             <div className={`alert ${alert.type}`}>{alert.message}</div>
                         }
