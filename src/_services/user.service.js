@@ -61,14 +61,14 @@ function register(user) {
     return fetch(`${config.apiUrl}/users/register`, requestOptions).then(handleResponse);
 }
 
-function update(user) {
+function update(id, user) {
     const requestOptions = {
         method: 'PUT',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
     };
 
-    return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(handleResponse);;
+    return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript
