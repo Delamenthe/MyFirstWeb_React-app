@@ -1,10 +1,9 @@
-import React, {Component, useState} from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../_actions';
 import Table from 'react-bootstrap/Table';
 import {Button} from "react-bootstrap";
-import "regenerator-runtime/runtime";
 
 
 class HomePage extends React.Component {
@@ -41,6 +40,10 @@ class HomePage extends React.Component {
             return user;
         });
 
+        //To Control Master Checkbox State
+        const totalItems = this.state.List.length;
+        const totalCheckedItems = tempList.filter((e) => e.selected).length;
+
         // Update State
         this.setState({
             MasterChecked: totalItems === totalCheckedItems,
@@ -49,20 +52,18 @@ class HomePage extends React.Component {
         });
     }
 
-    // Event to get selected rows(Optional)
-    getSelectedRows() {
-        this.setState({
-            SelectedList: this.state.List.filter((e) => e.selected),
-        });
-    }
 
     componentDidMount() {
         this.props.getUsers();
     }
 
-    handleDeleteUsers(id) {
-        return () => this.props.deleteUser(id);
+    deleteUsers(){
+        let sList=this.state.SelectedList;
+        for (let i =0; i<sList.length; i++){
+            this.props.deleteUser(sList[i].id);
+        }
     }
+
 
     render() {
         const { user, users } = this.props;
@@ -70,7 +71,7 @@ class HomePage extends React.Component {
         return (
             <div className="col-md-6 col-md-offset-3">
                 <h3>All registered users:</h3>
-                <Button as="input" type="button" value="Delete" onClick={this.handleDeleteUsers(2)} />{'  '}
+                <Button as="input" type="button" value="Delete" onClick={()=>this.deleteUsers()} />{'  '}
                 <Button as="input" type="button" value="Block" />{'  '}
                 <Button as="input" type="button" value="Unblock" />
                 {users.loading && <em>Loading users...</em>}
