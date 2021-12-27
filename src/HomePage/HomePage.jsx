@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { userActions } from '../_actions';
 import Table from 'react-bootstrap/Table';
 import {Button} from "react-bootstrap";
-import {userService} from "../_services";
 
 
 class HomePage extends React.Component {
@@ -61,6 +60,7 @@ class HomePage extends React.Component {
         let sList=this.state.SelectedList;
         for (let i =0; i<sList.length; i++){
             this.props.deleteUser(sList[i].id);
+            location.reload();
         }
     }
 
@@ -68,13 +68,25 @@ class HomePage extends React.Component {
         const { user, users } = this.props;
         let sList=this.state.SelectedList;
         for (let i =0; i<sList.length; i++){
-            users.items[users.items.indexOf(sList[i])].status = "Passive" ;
+            users.items[users.items.indexOf(sList[i])].status = "Blocked" ;
+            this.props.update(sList[i].id,this.state.List[this.state.List.indexOf(sList[i])]);
+            if (user.status==="Blocked"){
+                this.props.logout();
+            }
+
+        }
+    }
+
+    unblockUsers(){
+        const { user, users } = this.props;
+        let sList=this.state.SelectedList;
+        for (let i =0; i<sList.length; i++){
+            users.items[users.items.indexOf(sList[i])].status = "Active" ;
             this.props.update(sList[i].id,this.state.List[this.state.List.indexOf(sList[i])]);
 
         }
 
     }
-
 
     render() {
         const { user, users } = this.props;
@@ -84,9 +96,7 @@ class HomePage extends React.Component {
                 <h3>All registered users:</h3>
                 <Button as="input" type="button" value="Delete" onClick={()=>this.deleteUsers()} />{'  '}
                 <Button as="input" type="button" value="Block" onClick={()=>this.blockUsers()}/>{'  '}
-                <Button as="input" type="button" value="Unblock" />
-                {users.loading && <em>Loading users...</em>}
-                {users.error && <span className="text-danger">ERROR: {users.error}</span>}
+                <Button as="input" type="button" value="Unblock" onClick={()=>this.unblockUsers()} />
                 <Table striped bordered hover>
                     <thead>
                     <tr>
@@ -148,7 +158,8 @@ function mapState(state) {
 const actionCreators = {
     getUsers: userActions.getAll,
     deleteUser: userActions.delete,
-    update: userActions.update
+    update: userActions.update,
+    logout: userActions.logout
 }
 
 const connectedHomePage = connect(mapState, actionCreators)(HomePage);
