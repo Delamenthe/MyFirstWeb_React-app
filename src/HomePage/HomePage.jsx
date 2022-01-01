@@ -81,6 +81,7 @@ class HomePage extends React.Component {
             users.items[users.items.indexOf(sList[i])].status = "Active" ;
             this.props.update(sList[i].id,this.state.List[this.state.List.indexOf(sList[i])]);
         }
+        location.reload();
     }
 
     render() {
