@@ -67,11 +67,10 @@ class HomePage extends React.Component {
     blockUsers(){
         const { user, users } = this.props;
         let sList=this.state.SelectedList;
-        for (let i =0; i<sList.length; i++){
-            users.items[users.items.indexOf(sList[i])].status = "Blocked" ;
-            this.props.update(sList[i].id,this.state.List[this.state.List.indexOf(sList[i])]);
+        for (let i =0; i<sList.length; i++) {
+            users.items[users.items.indexOf(sList[i])].status = "Blocked";
+            this.props.update(sList[i].id, this.state.List[this.state.List.indexOf(sList[i])]);
         }
-        location.reload();
     }
 
     unblockUsers(){
